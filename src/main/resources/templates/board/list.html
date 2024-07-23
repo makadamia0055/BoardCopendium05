@@ -3,6 +3,7 @@
     xmlns:layout="http://www.utraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/basic.html}"
 >
+
 <div layout:fragment="content">
     <div class="row mt-3">
         <form action="/board/list" method="get">
@@ -53,11 +54,13 @@
 
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody th:with="link =${pageRequestDTO.getLink()}">
                         <tr th:each="dto:${responseDTO.dtoList}" >
                             <th scope="row">[[${dto.bno}]]</th>
                             <td>
-                                [[${dto.title}]]
+                                <a th:href="|@{/board/read(bno = ${dto.bno})}&${link}|">
+                                    [[${dto.title}]]
+                                </a>
                             </td>
                             <td>[[${dto.writer}]]</td>
                             <td>[[${#temporals.format(dto.regDate, 'yyyy-MM-dd')}]]</td>
@@ -86,16 +89,15 @@
             </div><!--end card -->
         </div><!--end col-->
     </div><!--end row-->
-<div class="modal" tabindex="-1">
+<div class="modal" id="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="mldal" aria-label="Close"></button>
-
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Modal body text goes here</p>
+                <p>Modal body text goes here.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -103,7 +105,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <script layout:fragment="script" th:inline="javascript">
