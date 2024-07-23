@@ -44,15 +44,10 @@
 
                         <div class="my-4">
                             <div class="float-end" th:with="link = ${pageRequestDTO.getLink()}">
-                                <a th:href="|@{/board/list}?${link}|" class="text-decoration-none">
-                                    <button type="button" class="btn btn-primary">List</button>
-                                </a>
-                                <a th:href="|@{/board/modify(bno=${dto.bno})}&${link}|" class="text-decoration-none">
-                                    <button type="button" class="btn btn-secondary">Modify</button>
-                                </a>
-                                <a th:href="|@{/board/modify(bno=${dto.bno})}&${link}|" class="text-decoration-none">
-                                    <button type="button" class="btn btn-secondary">Remove</button>
-                                </a>
+                                    <button type="button" class="btn btn-primary listBtn">List</button>
+                                    <button type="button" class="btn btn-secondary modBtn">Modify</button>
+
+                                    <button type="button" class="btn btn-secondary removeBtn">Remove</button>
 
                             </div>
 
@@ -91,6 +86,22 @@
         formObj.action = `/board/modify?${link}`
         formObj.method = 'post'
         formObj.submit()
+    }, false)
+
+    document.querySelector(".removeBtn").addEventListener("click", function(e){
+        e.preventDefault()
+        e.stopPropagation()
+        formObj.action = `/board/remove`
+        formObj.method = 'post'
+        formObj.submit()
+    }, false)
+
+    document.querySelector(".listBtn").addEventListener("click", function(e){
+        e.preventDefault()
+        e.stopPropagation()
+
+        formObj.remove()
+        self.location = `/board/list?${link}`
     }, false)
 
 </script>
