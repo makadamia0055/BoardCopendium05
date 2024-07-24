@@ -15,7 +15,7 @@ public class RootConfig {
         modelMapper.getConfiguration()
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(AccessLevel.PRIVATE)
-                .setMatchingStrategy(MatchingStrategies.STRICT);
+                .setMatchingStrategy(MatchingStrategies.LOOSE);
 
         return modelMapper;
     }
