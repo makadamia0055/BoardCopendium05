@@ -8,11 +8,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 import org.zerock.b02.domain.Board;
 import org.zerock.b02.dto.BoardListReplyCountDTO;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -152,4 +154,31 @@ class BoardRepositoryTest {
 
     }
 
+    @Test
+    public void testInsertWithImages(){
+        Board board = Board.builder()
+                .title("Image Test")
+                .content("첨부파일 테스트")
+                .writer("tester")
+                .build();
+
+        for(int i = 0; i<3; i++){
+            board.addImage(UUID.randomUUID().toString(), "file"+i+".jpg");
+        } // end for
+
+        boardRepository.save(board);
+    }
+
+    @Transactional
+    @Test
+    public void testReadWithImages(){
+        // 반드시 존재하는 bno로 확인
+        Optional<Board> result = boardRepository.findById(1L);
+
+        Board board = result.orElseThrow();
+
+        log.info(board);
+        log.info("--------");
+        log.info(board.getImageSet());
+    }
 }

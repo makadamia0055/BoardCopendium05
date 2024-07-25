@@ -3,7 +3,10 @@ package org.zerock.b02.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-@ToString
+import java.util.HashSet;
+import java.util.Set;
+
+@ToString(exclude = "imageSet")
 @Getter
 @Builder
 @AllArgsConstructor
@@ -23,6 +26,27 @@ public class Board extends BaseEntity{
 
     @Column(length = 50, nullable = false)
     private String writer;
+
+    @OneToMany(mappedBy = "board",
+            cascade = {CascadeType.ALL},
+            fetch = FetchType.LAZY) // BoardImage의 board 변수
+    @Builder.Default
+    private Set<BoardImage> imageSet = new HashSet<>();
+
+    public void addImage(String uuid, String fileName){
+        BoardImage boardImage = BoardImage.builder()
+                .uuid(uuid)
+                .fileName(fileName)
+                .board(this)
+                .ord(imageSet.size())
+                .build();
+        imageSet.add(boardImage);
+    }
+
+    public void clearImage(){
+        imageSet.forEach(boardImage -> boardImage.changeBoard(null));
+        this.imageSet.clear();
+    }
 
     public void change(String title, String content){
         this.title = title;
